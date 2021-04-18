@@ -14,7 +14,7 @@ import java.util.Set;
 @Controller
 public class RegistrationController {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public RegistrationController(final UserRepository userRepository) {

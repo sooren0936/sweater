@@ -1,9 +1,16 @@
 package com.example.sweater.domain;
 
-public enum Role {
+import org.springframework.security.core.GrantedAuthority;
+
+public enum Role implements GrantedAuthority {
 
     /**
      * Основной пользователь приложения.
      */
-    USER
+    USER;
+
+    @Override
+    public String getAuthority() {
+        return name();
+    }
 }
