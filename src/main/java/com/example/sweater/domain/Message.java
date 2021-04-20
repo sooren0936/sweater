@@ -60,6 +60,10 @@ public class Message {
         this.user = author;
     }
 
+    public String getUserName() {
+        return user != null ? user.getUsername() : "null";
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -86,9 +90,5 @@ public class Message {
             .add("text='" + text + "'")
             .add("tag='" + tag + "'")
             .toString();
-    }
-
-    public String takeUserName() {
-        return user != null ? user.getUsername() : "null";
     }
 }

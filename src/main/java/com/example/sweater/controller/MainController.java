@@ -6,6 +6,7 @@ import com.example.sweater.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,10 +29,14 @@ public class MainController {
     }
 
     @GetMapping("/main")
-    public String main(final Map<String, Object> model) {
-        final Iterable<Message> messages = messageRepository.findAll();
+    public String main(@RequestParam(required = false, defaultValue = "") final String filter,
+                       final Model model) {
+        final Iterable<Message> messages = filter != null && !filter.isEmpty()
+            ? messageRepository.findByTag(filter)
+            : messageRepository.findAll();
 
-        model.put("messages", messages);
+        model.addAttribute("messages", messages);
+        model.addAttribute("filter", filter);
         return "main";
     }
 
@@ -42,18 +47,6 @@ public class MainController {
                       final Map<String, Object> model) {
         messageRepository.save(new Message(text, tag, user));
         final Iterable<Message> messages = messageRepository.findAll();
-
-        model.put("messages", messages);
-        return "main";
-    }
-
-    @PostMapping("filter")
-    public String filter(@RequestParam final String tag,
-                         final Map<String, Object> model) {
-
-        final Iterable<Message> messages = tag != null && !tag.isEmpty()
-            ? messageRepository.findByTag(tag)
-            : messageRepository.findAll();
 
         model.put("messages", messages);
         return "main";
